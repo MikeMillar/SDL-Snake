@@ -59,6 +59,8 @@ namespace sf {
 				return false;
 			}
 		}
+
+
 		return true;
 	}
 	void Screen::close() {

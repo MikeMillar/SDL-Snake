@@ -5,6 +5,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <stdio.h>
 using namespace std;
 
 void drawFruit(sf::Screen& screen, int randX, int randY);
@@ -26,9 +27,14 @@ int main(int argc, char* argv[]) {
 	int fruitY = rand() % 693 + 56;
 	drawFruit(screen, fruitX, fruitY);
 
+	int testX = 400;
+	int testY = 400;
 
 	while (true) {
-		screen.drawBoard();				
+		screen.drawBoard();		
+		input(snake);
+		snake.updatePosition(snake.getDir());
+		
 
 		if (snake.getX() == fruitX && snake.getY() == fruitY) { // If snake lands on fruit, new fruit location
 			fruitX = rand() % 693 + 56;
@@ -36,26 +42,20 @@ int main(int argc, char* argv[]) {
 			drawFruit(screen, fruitX, fruitY);
 		}
 
-		//for (int row = -4; row <= 4; row++) { // Drawns 9x9 snake head
-		//	for (int col = -4; col <= 4; col++) {
-		//		screen.setPixel(snake.getX() + col, snake.getY() + row, 0x00, 0xff, 0x00);
-		//	}
-		//}
-
-		screen.setPixel(snake.getX(), snake.getY(), 0x00, 0xff, 0x00);
-
-		char key = ' ';
-		if (_kbhit()) {
-			key = _getch();
-			screen.setPixel(500, 500, 0x00, 0xff, 0x00);
+		for (int row = -4; row <= 4; row++) { // Drawns 9x9 snake head
+			for (int col = -4; col <= 4; col++) {
+				screen.setPixel(snake.getX() + col, snake.getY() + row, 0x00, 0xff, 0x00);
+			}
 		}
-		snake.updatePosition(key);
+
+		//screen.setPixel(snake.getX(), snake.getY(), 0x00, 0xff, 0x00);
+
 
 		screen.update();
 
 
 
-
+		
 		if (screen.processEvents() == false) {
 			break;
 		}
@@ -74,5 +74,24 @@ void drawFruit(sf::Screen &screen, int randX, int randY) {
 }
 
 void input(Snake& snake) {
-	
+	SDL_Event move_event;
+	while (SDL_PollEvent(&move_event)) {
+		if (move_event.type == SDL_KEYDOWN) {
+			switch (move_event.key.keysym.sym)
+			{
+			case SDLK_w:
+				snake.updateDirection(1);
+				break;
+			case SDLK_s:
+				snake.updateDirection(3);
+				break;
+			case SDLK_a:
+				snake.updateDirection(4);
+				break;
+			case SDLK_d:
+				snake.updateDirection(2);
+				break;
+			}
+		}
+	}
 }
