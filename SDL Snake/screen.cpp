@@ -3,7 +3,7 @@
 
 namespace sf {
 
-	Screen::Screen() : m_window(NULL), m_renderer(NULL), m_texture(NULL) {
+	Screen::Screen() : m_window(NULL), m_renderer(NULL), m_texture(NULL), m_buffer1(NULL) {
 
 	}
 	bool Screen::init() {
@@ -44,7 +44,7 @@ namespace sf {
 
 		m_buffer1 = new Uint32[SCREEN_WIDTH * SCREEN_HEIGHT]; // Allocate memory for all pixels in program
 
-		memset(m_buffer1, 0, SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32)); // Sets all pixel memory to white
+		memset(m_buffer1, 50, SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32)); // Sets all pixel memory to dark grey once update is called
 
 
 		return true;
@@ -68,6 +68,7 @@ namespace sf {
 		SDL_DestroyWindow(m_window);
 		SDL_Quit();
 	}
+
 	void Screen::update() {
 		// Update screen information
 		SDL_UpdateTexture(m_texture, NULL, m_buffer1, SCREEN_WIDTH * sizeof(Uint32));
@@ -75,4 +76,37 @@ namespace sf {
 		SDL_RenderCopy(m_renderer, m_texture, NULL, NULL);
 		SDL_RenderPresent(m_renderer);
 	}
+
+	void Screen::setPixel(int x, int y, Uint8 red, Uint8 green, Uint8 blue) {
+
+		if (x < 0 || x >= sf::Screen::SCREEN_WIDTH || y < 0 || y >= sf::Screen::SCREEN_HEIGHT) {
+			return;
+		}
+
+		Uint32 color = 0;
+
+		color += red;
+		color <<= 8;
+		color += green;
+		color <<= 8;
+		color += blue;
+		color <<= 8;
+		color += 0xFF;
+
+		m_buffer1[(y * SCREEN_WIDTH) + x] = color;
+	}
+
+	void Screen::drawBoard() {
+		
+		for (int y = 0; y < SCREEN_HEIGHT; y++) {
+			for (int x = 0; x < SCREEN_WIDTH; x++) {
+				if (x >= 50 && x <= 751 && y >= 50 && y <= 751) {
+					if ((x >= 50 && x <= 51) || (y >= 50 && y <= 51) || (x >= 750 && x <= 751) || (y >= 750 && y <= 751)) {
+						setPixel(x, y, 0xFF, 0xFF, 0xFF);					}
+				}
+				
+			}
+		}
+	}
+
 }

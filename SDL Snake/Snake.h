@@ -4,7 +4,7 @@
 
 class Snake {
 private:
-
+	int m_x, m_y, m_tailSize;
 
 
 public:

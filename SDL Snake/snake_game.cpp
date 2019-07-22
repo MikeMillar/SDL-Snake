@@ -10,7 +10,8 @@ int main(int argc, char* argv[]) {
 	screen.init();
 
 	while (true) {
-
+		screen.drawBoard();
+		screen.update();
 
 
 
