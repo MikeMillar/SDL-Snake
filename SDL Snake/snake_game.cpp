@@ -10,6 +10,7 @@ using namespace std;
 
 void drawFruit(sf::Screen& screen, int randX, int randY);
 void input(Snake& snake, int& xSpeed, int& ySpeed);
+void update();
 
 
 int main(int argc, char* argv[]) {
@@ -40,6 +41,13 @@ int main(int argc, char* argv[]) {
 		if (currentTime >= 500) { // Game updates once per half-second
 			screen.drawBoard();
 			
+			int currentX = snake.getX();
+			int currentY = snake.getY();
+			for (int row = -4; row <= 4; row++) { // Clears old snake head pos
+				for (int col = -4; col <= 4; col++) {
+					screen.setPixel(currentX + col, currentY + row, 0x32, 0x32, 0x32);
+				}
+			}
 		
 			snake.updatePosition(snake.getDir());
 
@@ -57,7 +65,7 @@ int main(int argc, char* argv[]) {
 			}
 			cout << "Current Snake Position: (" << snake.getX() << ", " << snake.getY() << ")." << endl;
 
-			screen.setPixel(testX, testY, 0x00, 0xff, 0x00);
+			//screen.setPixel(testX, testY, 0x00, 0xff, 0x00);
 
 
 			screen.update();
@@ -107,4 +115,8 @@ void input(Snake& snake, int& xSpeed, int& ySpeed) {
 			}
 		}
 	}
+}
+
+void update() {
+
 }
