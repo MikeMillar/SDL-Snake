@@ -37,16 +37,16 @@ void Snake::updatePosition(directions dir) {
 	case Snake::STOP:
 		break;
 	case Snake::LEFT:
-		m_x += -5;
+		m_x += -10;
 		break;
 	case Snake::RIGHT:
-		m_x += 5;
+		m_x += 10;
 		break;
 	case Snake::UP:
-		m_y += -5;
+		m_y += -10;
 		break;
 	case Snake::DOWN:
-		m_y += 5;
+		m_y += 10;
 		break;
 	}
 }

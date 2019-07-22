@@ -9,7 +9,7 @@
 using namespace std;
 
 void drawFruit(sf::Screen& screen, int randX, int randY);
-void input(Snake& snake);
+void input(Snake& snake, int& xSpeed, int& ySpeed);
 
 
 int main(int argc, char* argv[]) {
@@ -23,39 +23,48 @@ int main(int argc, char* argv[]) {
 	screen.init();
 
 	// Random Fruit location
-	int fruitX = rand() % 693 + 56;
-	int fruitY = rand() % 693 + 56;
+	int fruitX = (rand() % 68 + 6) * 10;
+	int fruitY = (rand() % 68 + 6) * 10;
 	drawFruit(screen, fruitX, fruitY);
 
 	int testX = 400;
 	int testY = 400;
+	int testXSpeed = 0;
+	int testYSpeed = 0;
+
+	double startTime = SDL_GetTicks();
 
 	while (true) {
-		screen.drawBoard();		
-		input(snake);
-		snake.updatePosition(snake.getDir());
+		double currentTime = SDL_GetTicks() - startTime;
+		input(snake, testXSpeed, testYSpeed);
+		if (currentTime >= 500) { // Game updates once per half-second
+			screen.drawBoard();
+			
 		
+			snake.updatePosition(snake.getDir());
 
-		if (snake.getX() == fruitX && snake.getY() == fruitY) { // If snake lands on fruit, new fruit location
-			fruitX = rand() % 693 + 56;
-			fruitY = rand() % 693 + 56;
-			drawFruit(screen, fruitX, fruitY);
-		}
 
-		for (int row = -4; row <= 4; row++) { // Drawns 9x9 snake head
-			for (int col = -4; col <= 4; col++) {
-				screen.setPixel(snake.getX() + col, snake.getY() + row, 0x00, 0xff, 0x00);
+			if (snake.getX() == fruitX && snake.getY() == fruitY) { // If snake lands on fruit, new fruit location
+				fruitX = (rand() % 68 + 6) * 10;
+				fruitY = (rand() % 68 + 6) * 10;
+				drawFruit(screen, fruitX, fruitY);
 			}
-		}
 
-		//screen.setPixel(snake.getX(), snake.getY(), 0x00, 0xff, 0x00);
+			for (int row = -4; row <= 4; row++) { // Drawns 9x9 snake head
+				for (int col = -4; col <= 4; col++) {
+					screen.setPixel(snake.getX() + col, snake.getY() + row, 0x00, 0xff, 0x00);
+				}
+			}
+			cout << "Current Snake Position: (" << snake.getX() << ", " << snake.getY() << ")." << endl;
+
+			screen.setPixel(testX, testY, 0x00, 0xff, 0x00);
 
 
-		screen.update();
+			screen.update();
+					   			 		  			
+			startTime = SDL_GetTicks();
+		}	
 
-
-
-		
 		if (screen.processEvents() == false) {
 			break;
 		}
@@ -73,22 +82,26 @@ void drawFruit(sf::Screen &screen, int randX, int randY) {
 	}
 }
 
-void input(Snake& snake) {
+void input(Snake& snake, int& xSpeed, int& ySpeed) {
 	SDL_Event move_event;
 	while (SDL_PollEvent(&move_event)) {
 		if (move_event.type == SDL_KEYDOWN) {
 			switch (move_event.key.keysym.sym)
 			{
 			case SDLK_w:
+				ySpeed = -1;
 				snake.updateDirection(1);
 				break;
 			case SDLK_s:
+				ySpeed = 1;
 				snake.updateDirection(3);
 				break;
 			case SDLK_a:
+				xSpeed = -1;
 				snake.updateDirection(4);
 				break;
 			case SDLK_d:
+				xSpeed = 1;
 				snake.updateDirection(2);
 				break;
 			}
