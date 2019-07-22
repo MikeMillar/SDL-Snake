@@ -2,7 +2,7 @@
 #include "Screen.h"
 
 
-Snake::Snake(): m_x(400), m_y(400), m_tailSize(0), headWidth(9), headHeight(9), tailWidth(5), tailHeight(5), dir(STOP) {}
+Snake::Snake(): m_x(400), m_y(400), m_tailSize(0), headWidth(9), headHeight(9), tailWidth(5), tailHeight(5), dir(0) {}
 
 Snake::~Snake() {}
 
@@ -14,38 +14,38 @@ void Snake::updateDirection(int direct) {
 	switch (direct)
 	{
 	case 0:
-		dir = STOP;
+		dir = direct;
 		break;
 	case 1:
-		dir = UP;
+		dir = direct;
 		break;
 	case 2:
-		dir = RIGHT;
+		dir = direct;
 		break;
 	case 3:
-		dir = DOWN;
+		dir = direct;
 		break;
 	case 4:
-		dir = LEFT;
+		dir = direct;;
 		break;
 	}
 }
 
-void Snake::updatePosition(directions dir) {
+void Snake::updatePosition(int dir) {
 	switch (dir)
 	{
-	case Snake::STOP:
+	case 0:
 		break;
-	case Snake::LEFT:
+	case 4:
 		m_x += -10;
 		break;
-	case Snake::RIGHT:
+	case 2:
 		m_x += 10;
 		break;
-	case Snake::UP:
+	case 1:
 		m_y += -10;
 		break;
-	case Snake::DOWN:
+	case 3:
 		m_y += 10;
 		break;
 	}

@@ -5,8 +5,7 @@
 class Snake {
 private:
 	int m_x, m_y, m_tailSize, headWidth, headHeight, tailWidth, tailHeight;
-	enum directions {STOP, LEFT, RIGHT, UP, DOWN};
-	directions dir;
+	int dir;
 
 
 public:
@@ -15,8 +14,8 @@ public:
 	void init();
 	int getX() { return m_x; }
 	int getY() { return m_y; }
-	directions getDir() { return dir; }
-	void updatePosition(directions dir);
+	int getDir() { return dir; }
+	void updatePosition(int dir);
 	void updateDirection(int direct);
 };
 

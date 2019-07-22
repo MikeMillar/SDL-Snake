@@ -10,7 +10,7 @@ using namespace std;
 
 void drawFruit(sf::Screen& screen, int randX, int randY);
 void input(Snake& snake, int& xSpeed, int& ySpeed);
-void update();
+void update(Snake& snake, sf::Screen& screen, int& fruitX, int& fruitY);
 
 
 int main(int argc, char* argv[]) {
@@ -41,29 +41,7 @@ int main(int argc, char* argv[]) {
 		if (currentTime >= 500) { // Game updates once per half-second
 			screen.drawBoard();
 			
-			int currentX = snake.getX();
-			int currentY = snake.getY();
-			for (int row = -4; row <= 4; row++) { // Clears old snake head pos
-				for (int col = -4; col <= 4; col++) {
-					screen.setPixel(currentX + col, currentY + row, 0x32, 0x32, 0x32);
-				}
-			}
-		
-			snake.updatePosition(snake.getDir());
-
-
-			if (snake.getX() == fruitX && snake.getY() == fruitY) { // If snake lands on fruit, new fruit location
-				fruitX = (rand() % 68 + 6) * 10;
-				fruitY = (rand() % 68 + 6) * 10;
-				drawFruit(screen, fruitX, fruitY);
-			}
-
-			for (int row = -4; row <= 4; row++) { // Drawns 9x9 snake head
-				for (int col = -4; col <= 4; col++) {
-					screen.setPixel(snake.getX() + col, snake.getY() + row, 0x00, 0xff, 0x00);
-				}
-			}
-			cout << "Current Snake Position: (" << snake.getX() << ", " << snake.getY() << ")." << endl;
+			update(snake, screen, fruitX, fruitY);
 
 			//screen.setPixel(testX, testY, 0x00, 0xff, 0x00);
 
@@ -97,26 +75,55 @@ void input(Snake& snake, int& xSpeed, int& ySpeed) {
 			switch (move_event.key.keysym.sym)
 			{
 			case SDLK_w:
-				ySpeed = -1;
-				snake.updateDirection(1);
+				if (snake.getDir() != 3) {
+					ySpeed = -1;
+					snake.updateDirection(1);
+				}				
 				break;
 			case SDLK_s:
-				ySpeed = 1;
-				snake.updateDirection(3);
+				if (snake.getDir() != 1) {
+					ySpeed = 1;
+					snake.updateDirection(3);
+				}				
 				break;
 			case SDLK_a:
-				xSpeed = -1;
-				snake.updateDirection(4);
+				if (snake.getDir() != 2) {
+					xSpeed = -1;
+					snake.updateDirection(4);
+				}				
 				break;
 			case SDLK_d:
-				xSpeed = 1;
-				snake.updateDirection(2);
+				if (snake.getDir() != 4) {
+					xSpeed = 1;
+					snake.updateDirection(2);
+				}				
 				break;
 			}
 		}
 	}
 }
 
-void update() {
+void update(Snake& snake, sf::Screen& screen, int& fruitX, int& fruitY) {
+	int currentX = snake.getX();
+	int currentY = snake.getY();
+	for (int row = -4; row <= 4; row++) { // Clears old snake head pos
+		for (int col = -4; col <= 4; col++) {
+			screen.setPixel(currentX + col, currentY + row, 0x32, 0x32, 0x32);
+		}
+	}
+	snake.updatePosition(snake.getDir());
 
+
+	if (snake.getX() == fruitX && snake.getY() == fruitY) { // If snake lands on fruit, new fruit location
+		fruitX = (rand() % 68 + 6) * 10;
+		fruitY = (rand() % 68 + 6) * 10;
+		drawFruit(screen, fruitX, fruitY);
+	}
+
+	for (int row = -4; row <= 4; row++) { // Drawns 9x9 snake head
+		for (int col = -4; col <= 4; col++) {
+			screen.setPixel(snake.getX() + col, snake.getY() + row, 0x00, 0xff, 0x00);
+		}
+	}
+	cout << "Current Snake Position: (" << snake.getX() << ", " << snake.getY() << ")." << endl;
 }
