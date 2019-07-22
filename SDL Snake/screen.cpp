@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Screen.h"
+#include "Snake.h"
 
 namespace sf {
 
@@ -108,5 +109,4 @@ namespace sf {
 			}
 		}
 	}
-
 }

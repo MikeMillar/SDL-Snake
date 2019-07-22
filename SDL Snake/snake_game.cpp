@@ -4,13 +4,18 @@
 #include "Snake.h"
 #include <time.h>
 #include <stdlib.h>
+#include <conio.h>
 using namespace std;
 
 void drawFruit(sf::Screen& screen, int randX, int randY);
+void input(Snake& snake);
 
 
 int main(int argc, char* argv[]) {
 	srand (time(NULL));
+
+	
+
 	sf::Screen screen;
 	Snake snake;
 
@@ -23,19 +28,28 @@ int main(int argc, char* argv[]) {
 
 
 	while (true) {
-		screen.drawBoard();		
-
-		for (int row = -4; row <= 4; row++) { // Drawns 9x9 snake head
-			for (int col = -4; col <= 4; col++) {
-				screen.setPixel(snake.getX() + col, snake.getY() + row, 0x00, 0xff, 0x00);
-			}
-		}
+		screen.drawBoard();				
 
 		if (snake.getX() == fruitX && snake.getY() == fruitY) { // If snake lands on fruit, new fruit location
 			fruitX = rand() % 693 + 56;
 			fruitY = rand() % 693 + 56;
 			drawFruit(screen, fruitX, fruitY);
 		}
+
+		//for (int row = -4; row <= 4; row++) { // Drawns 9x9 snake head
+		//	for (int col = -4; col <= 4; col++) {
+		//		screen.setPixel(snake.getX() + col, snake.getY() + row, 0x00, 0xff, 0x00);
+		//	}
+		//}
+
+		screen.setPixel(snake.getX(), snake.getY(), 0x00, 0xff, 0x00);
+
+		char key = ' ';
+		if (_kbhit()) {
+			key = _getch();
+			screen.setPixel(500, 500, 0x00, 0xff, 0x00);
+		}
+		snake.updatePosition(key);
 
 		screen.update();
 
@@ -57,4 +71,8 @@ void drawFruit(sf::Screen &screen, int randX, int randY) {
 			screen.setPixel(randX + col, randY + row, 0xFF, 0x00, 0x00);
 		}
 	}
+}
+
+void input(Snake& snake) {
+	
 }
