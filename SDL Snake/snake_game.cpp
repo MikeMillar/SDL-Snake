@@ -10,7 +10,7 @@ using namespace std;
 
 void drawFruit(sf::Screen& screen, int randX, int randY);
 void input(Snake& snake, int& xSpeed, int& ySpeed);
-void update(Snake& snake, sf::Screen& screen, int& fruitX, int& fruitY);
+void update(Snake& snake, sf::Screen& screen, int& fruitX, int& fruitY, bool& gOver);
 
 
 int main(int argc, char* argv[]) {
@@ -34,19 +34,23 @@ int main(int argc, char* argv[]) {
 	int testYSpeed = 0;
 
 	double startTime = SDL_GetTicks();
-
+	bool gameOver = false;
 	while (true) {
 		double currentTime = SDL_GetTicks() - startTime;
 		input(snake, testXSpeed, testYSpeed);
 		if (currentTime >= 500) { // Game updates once per half-second
 			screen.drawBoard();
-			
-			update(snake, screen, fruitX, fruitY);
 
+			update(snake, screen, fruitX, fruitY, gameOver);
+			
 			//screen.setPixel(testX, testY, 0x00, 0xff, 0x00);
 
 
 			screen.update();
+
+			if (gameOver) {
+				break;
+			}
 					   			 		  			
 			startTime = SDL_GetTicks();
 		}	
@@ -103,7 +107,7 @@ void input(Snake& snake, int& xSpeed, int& ySpeed) {
 	}
 }
 
-void update(Snake& snake, sf::Screen& screen, int& fruitX, int& fruitY) {
+void update(Snake& snake, sf::Screen& screen, int& fruitX, int& fruitY, bool& gOver) {
 	int currentX = snake.getX();
 	int currentY = snake.getY();
 	for (int row = -4; row <= 4; row++) { // Clears old snake head pos
@@ -112,6 +116,9 @@ void update(Snake& snake, sf::Screen& screen, int& fruitX, int& fruitY) {
 		}
 	}
 	snake.updatePosition(snake.getDir());
+	if (snake.getX() < 60 || snake.getX() > 740 || snake.getY() < 60 || snake.getY() > 740) {
+		gOver = true;
+	}
 
 
 	if (snake.getX() == fruitX && snake.getY() == fruitY) { // If snake lands on fruit, new fruit location
